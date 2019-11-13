@@ -1,21 +1,49 @@
-<h1><%= @restaurant.name %></h1>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-10 col-sm-offset-1">
+      <h1><%= @restaurant.name %></h1>
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <th scope="row">Address</th>
+            <td><%= @restaurant.address %></td>
+          </tr>
+          <tr>
+            <th scope="row">Phone Number</th>
+            <td><%= @restaurant.phone_number %></td>
+          </tr>
+          <tr>
+            <th scope="row">Category</th>
+            <td><%= @restaurant.category %></td>
+          </tr>
+        </tbody>
+      </table>
 
-<ul>
-  <li>address: <%= @restaurant.address %></li>
-  <li>phone number: <%= @restaurant.phone_number %></li>
-  <li>category: <%= @restaurant.category %></li>
-</ul>
+      <div class="list-group">
+        <% @restaurant.reviews.each do |review| %>
+          <li class="list-group-item">
+            <small>
+              <% count = 0 %>
+              <% review.rating.times do %>
+                <% if review.rating > count %>
+                  <i class="fa fa-star"></i>
+                <% else %>
+                  <i class="fa fa-star"></i>
+                <% end %>
+                <% count += 1 %>
+              <% end %>
+            </small>
+            <p><%= review.content %></p>
+          </li>
+        <% end %>
+      </div>
 
-<ul>
-  <% @restaurant.reviews.each do |review| %>
-    <li><%= review.content %> - <%= review.rating %></li>
-  <% end %>
-</ul>
-
-<p>
-  <%= link_to "Create review", new_restaurant_review_path(@restaurant) %>
-</p>
-
-<p>
-  <%= link_to "Back to all restaurants", restaurants_path %>
-</p>
+      <%= simple_form_for [@restaurant, @review] do |f| %>
+        <%= f.input :rating, collection: 0..5 %>
+        <%= f.input :content%>
+        <%= f.submit class: 'btn btn-primary' %>
+      <% end %>
+      <%= link_to "See all restaurants", restaurants_path %>
+    </div>
+  </div>
+</div>
